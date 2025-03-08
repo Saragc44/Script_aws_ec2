@@ -3,7 +3,7 @@ from botocore.exceptions import ClientError
 
 
 # Crear un cliente de S3
-s3_client = boto3.client('s3')
+s3_client = boto3.client('s3', region_name='us-east-1')
 
 # Función para crear un bucket de S3
 def create_s3_bucket(bucket_name):
@@ -17,7 +17,7 @@ def create_s3_bucket(bucket_name):
 
 
 # Crear un cliente de EC2
-ec2_client = boto3.client('ec2')
+ec2_client = boto3.client('ec2', region_name='us-east-1')
 
 # Función para lanzar una instancia de EC2
 def create_ec2_instance():
