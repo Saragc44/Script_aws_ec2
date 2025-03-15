@@ -7,4 +7,6 @@ COPY listar-buckets.py .
 
 RUN pip install boto3
 
-CMD ["python", "./listar-buckets.py"]
+ENTRYPOINT  ["python", "./listar-buckets.py"]
+
+CMD[]
