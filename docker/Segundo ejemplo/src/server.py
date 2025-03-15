@@ -6,7 +6,7 @@ server= Flask(__name__)
 
 s3 =boto3.client('s3')
 
-@server.router("/", methods =['GET'])
+@server.route("/", methods =['GET'])
 def list_buckets():
     response= s3.list_buckets()
     return response
