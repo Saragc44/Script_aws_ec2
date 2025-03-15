@@ -3,8 +3,8 @@ FROM python:3.8
 
 WORKDIR /code
 
-COPY Listar.py .
+COPY listar-buckets.py .
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT ["python", "./listar.py"]
+ENTRYPOINT ["python", "./listar-buckets.py"]
