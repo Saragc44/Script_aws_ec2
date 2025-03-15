@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados</title>
+</head>
+<body>
+    <h1>Resultado para el Bucket: {{ bucket_name }}</h1>
+    
+    {% if error %}
+        <p>{{ error }}</p>
+    {% else %}
+        <ul>
+            {% for obj in objects %}
+                <li>
+                    <strong>{{ obj.Key }}</strong> - Última modificación: {{ obj.LastModified }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <a href="/">Volver</a>
+</body>
+</html>
