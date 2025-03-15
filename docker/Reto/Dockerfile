@@ -7,4 +7,4 @@ COPY listar-buckets.py .
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT ["python", "./listar-buckets.py"]
+CMD ["python", "./listar-buckets.py"]
