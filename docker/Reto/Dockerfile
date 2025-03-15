@@ -5,6 +5,6 @@ WORKDIR /code
 
 COPY listar-buckets.py .
 
-RUN pip install -r requirements.txt
+RUN pip install boto3
 
 CMD ["python", "./listar-buckets.py"]
