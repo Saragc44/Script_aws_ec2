@@ -1,55 +1,26 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, jsonify
 import boto3
-from botocore.exceptions import ClientError
 
-app = Flask(__name__)
+server = Flask(__name__)
 
-# Función para listar objetos en un bucket de S3
-def listar_objetos(bucket_name):
-    s3 = boto3.client('s3')
+s3 = boto3.client('s3')
 
-    try:
-        # Intentar obtener la lista de objetos en el bucket
-        response = s3.list_objects_v2(Bucket=bucket_name)
-
-        # Si el bucket tiene objetos, devolverlos
-        if 'Contents' in response:
-            objects = []
-            for obj in response['Contents']:
-                objects.append({
-                    'Key': obj['Key'],
-                    'LastModified': obj['LastModified'].strftime('%Y-%m-%d %H:%M:%S')
-                })
-            return objects
-        else:
-            return "El bucket está vacío."
+@server.route("/")
+def list_buckets():
+    query = request.args.get('query')  # Obtiene el parámetro de consulta 'query'
     
-    except ClientError as e:
-        # Manejo de errores si no tienes acceso o el bucket no existe
-        if e.response['Error']['Code'] == 'AccessDenied':
-            return f"No tienes acceso al bucket '{bucket_name}' o el bucket no existe."
-        else:
-            return f"Error al intentar acceder al bucket '{bucket_name}': {e}"
+    if query:
+        try:
+            s3.head_bucket(Bucket=query)  # Verifica si el bucket existe
+            objects = s3.list_objects_v2(Bucket=query)
+            object_names = [obj['Key'] for obj in objects.get('Contents', [])]
+            return jsonify({"Bucket": query, "Objects": object_names})
+        except s3.exceptions.ClientError:
+            return jsonify({"Error": "Bucket not found"}), 404
+    
+    response = s3.list_buckets()
+    bucket_names = [bucket['Name'] for bucket in response.get('Buckets', [])]
+    return jsonify({"Buckets": bucket_names})
 
-# Ruta principal (formulario para ingresar el nombre del bucket)
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-# Ruta para procesar el formulario y listar los objetos
-@app.route('/listar', methods=['POST'])
-def listar():
-    bucket_name = request.form.get('bucket_name')
-    if not bucket_name:
-        return "Por favor, proporciona un nombre de bucket válido."
-
-    # Llamar la función listar_objetos con el nombre del bucket proporcionado
-    result = listar_objetos(bucket_name)
-
-    if isinstance(result, list):
-        return render_template('result.html', objects=result, bucket_name=bucket_name)
-    else:
-        return render_template('result.html', error=result, bucket_name=bucket_name)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    server.run(host='0.0.0.0', port=5000, debug=True)
