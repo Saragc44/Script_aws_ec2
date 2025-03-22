@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 COPY src/ .
 
-CMD ["python", "./server.py"]
+CMD ["python","./server.py"]
