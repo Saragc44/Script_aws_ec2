@@ -9,8 +9,7 @@ app = Flask(__name__)
 s3_client = boto3.client('s3')
 
 # Nombre del bucket de S3
-BUCKET_NAME = os.getenv('sara-garcia-01-bucket')  # Asegúrate de establecer esta variable de entorno
-
+BUCKET_NAME = os.getenv('sara-garcia-01-bucket')  
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
