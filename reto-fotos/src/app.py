@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # Configuración de AWS
 s3_client = boto3.client('s3', region_name='us-east-1')  # Cambia la región si es necesario
-bucket_name = 'sara-garcia-01-bucket'  # Nombre de tu bucket de S3
+bucket_name = 'nombre-del-bucket'  # Nombre de tu bucket de S3
 
 # Extensiones permitidas para las fotos
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
