@@ -71,15 +71,15 @@ def upload():
 
     s3.upload_fileobj(file, BUCKET_ENTRADA, filename)
 
-    return jsonify({'mensaje': 'Imagen subida correctamente', 'archivo': filename})
+    return jsonify({'mensaje': 'Felicidades la imagen subio con exito', 'archivo': filename})
 
-@app.route('/procesar', methods=['GET'])
-def procesar():
+@app.route('/salir', methods=['GET'])
+def salir():
     bucket = BUCKET_ENTRADA
     nombre_archivo = request.args.get('file')
 
     if not bucket or not nombre_archivo:
-        return jsonify({'error': 'Faltan parametros: bucket y nombre_archivo'}), 400
+        return jsonify({'error': 'Faltan parametros en el archivo'}), 400
 
     try:
         response = s3.get_object(Bucket=bucket, Key=nombre_archivo)
@@ -92,7 +92,7 @@ def procesar():
         json_bytes = io.BytesIO(json.dumps(datos, indent=2).encode('utf-8'))
         s3.upload_fileobj(json_bytes, BUCKET_SALIDA, salida_key)
 
-        return jsonify({'mensaje': 'Datos procesados y subidos', 'datos': datos})
+        return jsonify({'mensaje': 'Informacion procesada ', 'datos': datos})
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
