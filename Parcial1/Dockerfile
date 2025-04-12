@@ -1,18 +1,19 @@
-FROM python:3.9-slim
+FROM python:3.8
 
-# Instalar dependencias de Tesseract
-RUN apt-get update && \
-    apt-get install -y tesseract-ocr libglib2.0-0 libsm6 libxext6 libxrender-dev && \
-    apt-get clean
+RUN apt-get update && apt-get install -y \
+    tesseract-ocr \
+    tesseract-ocr-spa \
+    libglib2.0-0 \
+    libsm6 \
+    libxrender1 \
+    libxext6 \
+    build-essential \
+    poppler-utils \
+    && apt-get clean
 
-# Crear directorio de la app
 WORKDIR /app
-
-# Copiar requerimientos y código
 COPY requirements.txt .
-COPY app.py .
-
-# Instalar librerías Python
-RUN pip install --no-cache-dir -r requirements.txt
-
+RUN pip install -r requirements.txt
+COPY . .
+EXPOSE 5000
 CMD ["python", "app.py"]
